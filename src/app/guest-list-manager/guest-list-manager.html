@@ -7,7 +7,7 @@
 
 <h3>Guest List</h3>
 <ul>
-  <li *ngFor="let guest of guests">
+  <li *ngFor="let guest of guests$ | async" [@fadeIn]>
     {{ guest.name }} - RSVP: <strong>{{ guest.rsvp }}</strong>
     <button (click)="updateRsvp(guest, 'Yes')">Confirm</button>
     <button (click)="updateRsvp(guest, 'No')">Decline</button>

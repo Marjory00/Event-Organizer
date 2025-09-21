@@ -1,6 +1,12 @@
+<app-toast></app-toast>
+
 <nav class="navbar">
   <div class="navbar-brand">Event-Organizer</div>
+
   <ul class="navbar-nav">
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+    </li>
     <li>
       <a routerLink="/guests" routerLinkActive="active-link">Guests</a>
     </li>
@@ -15,6 +21,15 @@
     </li>
     <li>
       <a routerLink="/schedule" routerLinkActive="active-link">Schedule</a>
+    </li>
+  </ul>
+
+  <ul class="navbar-auth">
+    <li>
+      <a *ngIf="isLoggedIn$ | async; else loginBtn" (click)="logout()">Logout</a>
+      <ng-template #loginBtn>
+        <a routerLink="/login">Login</a>
+      </ng-template>
     </li>
   </ul>
 </nav>

@@ -14,6 +14,10 @@ import { DataService } from './data';
 import { Dashboard } from './dashboard/dashboard';
 import { Calendar } from './calendar/calendar';
 
+import { Toast } from './toast';
+import { ToastComponent } from './toast/toast';
+import { Modal } from './modal/modal';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { Calendar } from './calendar/calendar';
     TaskChecklist,
     PrintableSchedule,
     Dashboard,
-    Calendar
+    Calendar,
+    ToastComponent,
+    Modal
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,15 @@
+<h2>Guest List Manager</h2>
+
+<div class="add-guest-form">
+  <input [(ngModel)]="newGuestName" placeholder="Enter guest name">
+  <button (click)="addGuest()">Add Guest</button>
+</div>
+
+<h3>Guest List</h3>
+<ul>
+  <li *ngFor="let guest of guests">
+    {{ guest.name }} - RSVP: <strong>{{ guest.rsvp }}</strong>
+    <button (click)="updateRsvp(guest, 'Yes')">Confirm</button>
+    <button (click)="updateRsvp(guest, 'No')">Decline</button>
+  </li>
+</ul>

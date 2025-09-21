@@ -1,0 +1,23 @@
+<div *ngIf="dashboardData$ | async as data" class="dashboard">
+  <h2>Event Summary Dashboard</h2>
+  <div class="card-container">
+    <div class="card">
+      <h3>Guest Count</h3>
+      <p>Total: {{ data.guestCounts.total }}</p>
+      <p class="confirmed">Confirmed: {{ data.guestCounts.yes }}</p>
+      <p class="declined">Declined: {{ data.guestCounts.no }}</p>
+    </div>
+    <div class="card">
+      <h3>Budget Status</h3>
+      <p>Total Spent: ${{ data.totalBudget | number:'1.2-2' }}</p>
+      <p>Estimated Remaining: (TBD)</p>
+    </div>
+    <div class="card">
+      <h3>Task Progress</h3>
+      <p>Completion: {{ data.taskCompletionPercentage | number:'1.0-0' }}%</p>
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="data.taskCompletionPercentage"></div>
+      </div>
+    </div>
+  </div>
+</div>

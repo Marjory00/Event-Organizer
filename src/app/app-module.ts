@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { PrintableSchedule } from './printable-schedule/printable-schedule';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { DataService } from './data';
+import { Dashboard } from './dashboard/dashboard';
+import { Calendar } from './calendar/calendar';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { DataService } from './data';
     VendorContactList,
     BudgetPlanner,
     TaskChecklist,
-    PrintableSchedule
+    PrintableSchedule,
+    Dashboard,
+    Calendar
   ],
   imports: [
     BrowserModule,

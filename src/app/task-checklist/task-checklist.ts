@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 interface Task {
   name: string;
   completed: boolean;
+  dueDate?: Date;
 }
 
 @Component({

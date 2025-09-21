@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 
 // Interfaces for your data types
 interface Guest {
@@ -38,28 +37,29 @@ interface ScheduleItem {
 @Injectable({
   providedIn: 'root'
 })
-
- export class DataService {
-  // Use a private property to track the next available ID
+export class DataService {
   private nextId = 0;
 
-  // Data Streams
+  // Guest List Data Stream
   private guestsSource = new BehaviorSubject<Guest[]>(this.getInitialGuests());
   guests$ = this.guestsSource.asObservable();
 
+  // Vendor Contact Data Stream
   private vendorsSource = new BehaviorSubject<Vendor[]>(this.getInitialVendors());
   vendors$ = this.vendorsSource.asObservable();
 
+  // Budget Planner Data Stream
   private budgetItemsSource = new BehaviorSubject<BudgetItem[]>(this.getInitialBudgetItems());
   budgetItems$ = this.budgetItemsSource.asObservable();
 
+  // Task Checklist Data Stream
   private tasksSource = new BehaviorSubject<Task[]>(this.getInitialTasks());
   tasks$ = this.tasksSource.asObservable();
 
+  // Printable Schedule Data Stream
   private scheduleSource = new BehaviorSubject<ScheduleItem[]>(this.getInitialSchedule());
   schedule$ = this.scheduleSource.asObservable();
 
-  // Helper function to get a unique ID
   private getUniqueId(): number {
     return this.nextId++;
   }
@@ -107,14 +107,12 @@ interface ScheduleItem {
     this.guestsSource.next([...currentGuests, guestWithId]);
   }
 
-  // New method to remove a guest
   removeGuest(guestId: number): void {
     const currentGuests = this.guestsSource.getValue();
     const updatedGuests = currentGuests.filter(guest => guest.id !== guestId);
     this.guestsSource.next(updatedGuests);
   }
 
-  // New method to update a guest's RSVP
   updateRsvp(guestId: number, status: 'Yes' | 'No' | 'Pending'): void {
     const guests = this.guestsSource.getValue();
     const guestToUpdate = guests.find(g => g.id === guestId);
@@ -124,7 +122,6 @@ interface ScheduleItem {
     }
   }
 
-  // New method to get guest counts for dashboard
   getGuestCounts(): Observable<{ total: number, yes: number, no: number, pending: number }> {
     return this.guestsSource.asObservable().pipe(
       map(guests => ({
@@ -182,5 +179,30 @@ interface ScheduleItem {
     const currentTasks = this.tasksSource.getValue();
     const updatedTasks = currentTasks.filter(task => task.id !== taskId);
     this.tasksSource.next(updatedTasks);
+  }
+
+  // --- Dashboard Data Method ---
+  getDashboardData(): Observable<any> {
+    return combineLatest([
+        this.guests$,
+        this.budgetItems$,
+        this.tasks$
+    ]).pipe(
+        map(([guests, budgetItems, tasks]) => {
+            const totalBudget = budgetItems.reduce((sum, item) => sum + item.cost, 0);
+            const completedTasks = tasks.filter(task => task.completed).length;
+            const taskCompletionPercentage = tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0;
+            return {
+                guestCounts: {
+                    total: guests.length,
+                    yes: guests.filter(g => g.rsvp === 'Yes').length,
+                    no: guests.filter(g => g.rsvp === 'No').length,
+                    pending: guests.filter(g => g.rsvp === 'Pending').length
+                },
+                totalBudget: totalBudget,
+                taskCompletionPercentage: taskCompletionPercentage
+            };
+        })
+    );
   }
 }

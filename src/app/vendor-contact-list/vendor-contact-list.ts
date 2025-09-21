@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { VendorContactService } from '../vendor-contact';
-
+import { Data } from '../data'; // Corrected import
+import { Observable } from 'rxjs';
 
 // Interface for a vendor
 interface Vendor {
@@ -12,35 +12,32 @@ interface Vendor {
 @Component({
   selector: 'app-vendor-contact-list',
   standalone: false,
-  templateUrl: './vendor-contact-list.html',
-  styleUrl: './vendor-contact-list.css'
+  templateUrl: './vendor-contact-list.html', // Corrected path
+  styleUrls: ['./vendor-contact-list.css'] // Corrected path
 })
 export class VendorContactList implements OnInit {
-
-  // Array to store vendor data
-  vendors: any[] = [];
+  // Use Observable to get data from the service
+  vendors$!: Observable<Vendor[]>;
 
   // Object for the new vendor form input
   newVendor = {
     name: '',
     contact: '',
-    service: '' };
+    service: ''
+  };
 
-  constructor(private vendorService: VendorContactService) { }
+  // Inject the DataService
+  constructor(private data: Data ) { }
 
-    ngOnInit(): void {
-    // Initial data for demonstration
-    this.vendors.push({ name: 'Caterer Co.', contact: '555-1234', service: 'Catering' });
-    this.vendors.push({ name: 'DJ Sound', contact: '555-5678', service: 'Music' });
+  ngOnInit(): void {
+    // Subscribe to the vendors data stream from the service
+    this.vendors$ = this.data.vendors$;
   }
 
-  // Adds a new vendor to the list
+  // Adds a new vendor using the DataService
   addVendor(): void {
-    // Check if both name and service are not empty
     if (this.newVendor.name.trim() && this.newVendor.service.trim()) {
-      // Use the spread operator to add a new vendor object to the array
-      this.vendors.push({ ...this.newVendor });
-
+      this.data.addVendor(this.newVendor);
       // Reset the form fields
       this.newVendor = { name: '', contact: '', service: '' };
     }

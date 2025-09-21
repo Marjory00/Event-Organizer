@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { DataService } from '../data';
 
 // Interface for a budget item
 interface BudgetItem {
+  id: number;
   name: string;
   cost: number;
+  isEditing?: boolean;
 
 }
 @Component({
@@ -12,29 +16,57 @@ interface BudgetItem {
   templateUrl: './budget-planner.html',
   styleUrl: './budget-planner.css'
 })
-export class BudgetPlanner {
-  // Array to store budget items
-  budgetItems: BudgetItem[] = [
-    { name: 'Venue Rental', cost: 2500 },
-    { name: 'Catering', cost: 1500 }
-  ];
+export class BudgetPlanner implements OnInit {
 
-// Object for the new budget item form input
-newItem = {
-  name: '',
-  cost: 0
-};
+  budgetItems$!: Observable<BudgetItem[]>;
+  totalCost$!: Observable<number>;
+  itemCount$!: Observable<number>;
 
-// Getter to calculate total cost
-get totalCost(): number {
-  return this.budgetItems.reduce((total, item) => total + item.cost, 0);
-}
+  newBudgetItem: Omit<BudgetItem, 'id'> = {
+    name: '',
+    cost: 0
+  };
 
-// Adds a new budget item to the list
-addItem(): void {
-  if (this.newItem.name && this.newItem.cost > 0) {
-    this.budgetItems.push({ ...this.newItem }); // Use spread operator to create a new object
-    this.newItem = { name: '', cost: 0 }; // Reset the form
+  constructor(private dataService: DataService) { }
+
+   ngOnInit(): void {
+    this.budgetItems$ = this.dataService.budgetItems$;
+    this.totalCost$ = this.budgetItems$.pipe(
+      map(items => items.reduce((sum, item) => sum + item.cost, 0))
+    );
+    this.itemCount$ = this.budgetItems$.pipe(
+      map(items => items.length)
+    );
   }
-}
+
+  addBudgetItem(): void {
+    if (this.newBudgetItem.name.trim() && this.newBudgetItem.cost > 0) {
+      this.dataService.addBudgetItem(this.newBudgetItem);
+      this.newBudgetItem = { name: '', cost: 0 };
+    }
+  }
+
+  removeBudgetItem(id: number): void {
+    this.dataService.removeBudgetItem(id);
+  }
+
+  // New method to enable editing
+  editItem(item: BudgetItem): void {
+    item.isEditing = true;
+  }
+
+  // New method to save edits
+  saveEdit(item: BudgetItem): void {
+    if (item.name.trim() && item.cost > 0) {
+      this.dataService.updateBudgetItem(item.id, item);
+      item.isEditing = false;
+    }
+  }
+
+  // New method to cancel editing
+  cancelEdit(item: BudgetItem): void {
+    item.isEditing = false;
+    // Optionally, revert changes here if you store a copy
+  }
+
 }

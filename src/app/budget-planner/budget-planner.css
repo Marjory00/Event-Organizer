@@ -24,3 +24,13 @@
   font-size: 14px;
   margin-top: 5px;
 }
+
+
+.is-invalid {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+}

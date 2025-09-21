@@ -1,5 +1,5 @@
-<app-toast></app-toast>
-<nav class="navbar">...</nav>
-<div class="container">
-  <router-outlet></router-outlet>
+<div *ngIf="toast" class="toast-container" [class.show]="toast">
+  <div class="toast-message" [ngClass]="toast.type">
+    {{ toast.message }}
+  </div>
 </div>

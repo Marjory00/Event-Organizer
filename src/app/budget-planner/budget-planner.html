@@ -1,46 +1,76 @@
 <h2>Budget Planner</h2>
 
-<form (ngSubmit)="addItem()" #budgetForm="ngForm">
-  <div class="form-group">
-    <label for="name">Item Name:</label>
-    <input type="text" id="name" name="name" [(ngModel)]="newItem.name" required #name="ngModel">
-    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
-      Item Name is required
+<div class="budget-form">
+  <h3>Add a New Budget Item</h3>
+  <form (ngSubmit)="addBudgetItem()" #budgetForm="ngForm">
+    <div class="form-group">
+      <label for="item-name">Item Name:</label>
+      <input
+        id="item-name"
+        type="text"
+        [(ngModel)]="newBudgetItem.name"
+        name="name"
+        required
+        #itemName="ngModel">
+      <div *ngIf="itemName.invalid && (itemName.dirty || itemName.touched)" class="error-message">
+        Item name is required.
+      </div>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label for="cost">Cost:</label>
-    <input type="number" id="cost" name="cost" [(ngModel)]="newItem.cost" required min="1" #cost="ngModel">
-    <div *ngIf="cost.invalid && (cost.dirty || cost.touched)" class="alert alert-danger">
-      <div *ngIf="cost.errors?.['required']">Cost is required</div>
-      <div *ngIf="cost.errors?.['min']">Cost must be greater than zero</div>
+    <div class="form-group">
+      <label for="item-cost">Cost ($):</label>
+      <input
+        id="item-cost"
+        type="number"
+        [(ngModel)]="newBudgetItem.cost"
+        name="cost"
+        required
+        #itemCost="ngModel">
+      <div *ngIf="itemCost.invalid && (itemCost.dirty || itemCost.touched)" class="error-message">
+        Cost is required.
+      </div>
     </div>
-  </div>
-
-  <button type="submit" [disabled]="!budgetForm.valid">Add Item</button>
-</form>
+    <button type="submit" [disabled]="budgetForm.invalid">Add Item</button>
+  </form>
+</div>
 
 <hr>
 
-<h3>Budget Summary</h3>
+<div class="budget-summary">
+  <h3>Total Budget: ${{ totalCost$ | async | number:'1.2-2' }}</h3>
+  <p>Total Items: {{ itemCount$ | async }}</p>
+</div>
+
+<h3>Budget Items</h3>
 <table>
   <thead>
     <tr>
       <th>Item</th>
       <th>Cost</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of budgetItems">
-      <td>{{ item.name }}</td>
-      <td>${{ item.cost | number: '1.2-2' }}</td>
+    <tr *ngFor="let item of budgetItems$ | async">
+      <ng-container *ngIf="!item.isEditing">
+        <td>{{ item.name }}</td>
+        <td>${{ item.cost | number:'1.2-2' }}</td>
+        <td>
+          <button (click)="editItem(item)">Edit</button>
+          <button (click)="removeBudgetItem(item.id)">Remove</button>
+        </td>
+      </ng-container>
+      <ng-container *ngIf="item.isEditing">
+        <td>
+          <input [(ngModel)]="item.name" name="name-{{item.id}}" required>
+        </td>
+        <td>
+          <input type="number" [(ngModel)]="item.cost" name="cost-{{item.id}}" required>
+        </td>
+        <td>
+          <button (click)="saveEdit(item)">Save</button>
+          <button (click)="cancelEdit(item)">Cancel</button>
+        </td>
+      </ng-container>
     </tr>
   </tbody>
-  <tfoot>
-    <tr>
-      <td><strong>Total:</strong></td>
-      <td><strong>${{ totalCost | number: '1.2-2' }}</strong></td>
-    </tr>
-  </tfoot>
 </table>

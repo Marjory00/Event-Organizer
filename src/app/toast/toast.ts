@@ -1,37 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { Toast, ToastService } from '../toast';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ToastService, Toast } from './toast.service';
 
 @Component({
   selector: 'app-toast',
-  standalone: false,
+  standalone: false, // This should be true if you want it to be used standalone
   templateUrl: './toast.html',
-  styleUrl: './toast.css',
-  animations: [
-    trigger('toastAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-20px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-out', style({ opacity: 0, transform: 'translateY(-20px)' }))
-      ])
-    ])
-  ]
+   styleUrls: ['./toast.css']
 })
-export class ToastComponent implements OnInit { // <-- Renamed to ToastComponent
+export class ToastComponent implements OnInit, OnDestroy {
   toast: Toast | null = null;
-  private timeoutId: any;
+  private subscription!: Subscription;
 
   constructor(private toastService: ToastService) { }
 
   ngOnInit(): void {
-    this.toastService.toastState.subscribe(toast => {
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId);
-      }
-      this.toast = toast;
-      this.timeoutId = setTimeout(() => this.toast = null, 3000);
+    this.subscription = this.toastService.toastState.subscribe(toastMessage => {
+      this.toast = toastMessage;
+      // Auto-hide after 3 seconds
+      setTimeout(() => this.toast = null, 3000);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -1,16 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { Observable, Subscribable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth/auth.service';
+import { AppRoutingModule } from "./app-routing-module";
+import { ToastService } from './toast/toast.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  standalone: false,
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
+  imports: [AppRoutingModule]
 })
-export class App {
-logout() {
-throw new Error('Method not implemented.');
-}
-  protected readonly title = signal('Event-Organizer');
-isLoggedIn$: Observable<unknown> | Subscribable<unknown> | PromiseLike<unknown> | undefined;
+export class App implements OnInit {
+  isLoggedIn$!: Observable<boolean>;
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ToastComponent } from './toast'; // Ensure this imports the correct component
+import { Toast } from './toast'; // Ensure this imports the correct component
 
 describe('ToastComponent', () => {
-  let component: ToastComponent; // Use the correct class name
-  let fixture: ComponentFixture<ToastComponent>;
+  let component: Toast; // Use the correct class name
+  let fixture: ComponentFixture<Toast>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ToastComponent] // Ensure you declare the correct component
+      declarations: [Toast] // Ensure you declare the correct component
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ToastComponent);
+    fixture = TestBed.createComponent(Toast);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

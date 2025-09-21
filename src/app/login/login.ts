@@ -9,16 +9,16 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./login.css']
 })
 export class Login {
-  credentials = { username: '', password: '' };
+  username: string = '';
+  password: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
 
   login(): void {
-    if (this.credentials.username === 'admin' && this.credentials.password === 'admin') {
-      this.authService.login();
+    if (this.authService.login(this.username, this.password)) {
       this.router.navigate(['/dashboard']);
     } else {
-      alert('Invalid username or password');
+      alert('Invalid username or password.');
     }
   }
 }

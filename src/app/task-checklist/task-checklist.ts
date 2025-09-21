@@ -1,38 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DataService } from '../data';
 
-// Interface for a task item
 interface Task {
+  id: number;
   name: string;
   completed: boolean;
-  dueDate?: Date;
 }
 
 @Component({
   selector: 'app-task-checklist',
   standalone: false,
   templateUrl: './task-checklist.html',
-  styleUrl: './task-checklist.css'
+  styleUrls: ['./task-checklist.css']
 })
-export class TaskChecklist {
-  // Array to hold the tasks
-  tasks: Task[] = [
-    { name: 'Send out invitations', completed: false },
-    { name: 'Book the photographeer', completed: true }
-  ];
-
-  // Property for the new task input
+export class TaskChecklist implements OnInit {
+  tasks$!: Observable<Task[]>;
   newTaskName: string = '';
 
-  // Adds a new tasks to the list
+  constructor(private dataService: DataService) { }
+
+  ngOnInit(): void {
+    this.tasks$ = this.dataService.tasks$;
+  }
+
   addTask(): void {
     if (this.newTaskName.trim()) {
-      this.tasks.push({ name: this.newTaskName, completed: false });
-      this.newTaskName = ''; // Reset the input field
+      this.dataService.addTask({ name: this.newTaskName.trim(), completed: false });
+      this.newTaskName = '';
     }
   }
 
-  // Toggle the completion status of a task
-  toggleCompletion(task: Task): void {
-    task.completed = !task.completed;
+  toggleCompletion(id: number): void {
+    this.dataService.toggleCompletion(id);
+  }
+
+  removeTask(id: number): void {
+    this.dataService.removeTask(id);
   }
 }

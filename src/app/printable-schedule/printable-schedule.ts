@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DataService } from '../data';
 
-
-// Interface for a schedule item
 interface ScheduleItem {
+  id: number;
   time: string;
   activity: string;
 }
@@ -11,19 +12,15 @@ interface ScheduleItem {
   selector: 'app-printable-schedule',
   standalone: false,
   templateUrl: './printable-schedule.html',
-  styleUrl: './printable-schedule.css'
+  styleUrls: ['./printable-schedule.css']
 })
-
 export class PrintableSchedule {
-  schedule: ScheduleItem[] = [
-    { time: '10:00 AM', activity: 'Guest Arrival' },
-    { time: '11:00 AM', activity: 'Ceremony Begins' },
-    { time: '12:00 PM', activity: 'Cocktail Hour' },
-    { time: '1:00 PM', activity: 'Reception Begins' },
-    { time: '4:00 PM', activity: 'Speeches' }
-  ];
+  schedule$!: Observable<ScheduleItem[]>;
 
-  // Method to trigger the print dialog
+  constructor(private dataService: DataService) {
+    this.schedule$ = this.dataService.schedule$;
+  }
+
   printSchedule(): void {
     window.print();
   }

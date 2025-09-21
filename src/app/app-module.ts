@@ -1,33 +1,50 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { AppRoutingModule } from './app-routing.module';
+import { App } from './app';
 import { GuestListManager } from './guest-list-manager/guest-list-manager';
 import { VendorContactList } from './vendor-contact-list/vendor-contact-list';
 import { BudgetPlanner } from './budget-planner/budget-planner';
 import { TaskChecklist } from './task-checklist/task-checklist';
 import { PrintableSchedule } from './printable-schedule/printable-schedule';
+import { DataService } from './data';
 import { Dashboard } from './dashboard/dashboard';
+import { Calendar } from './calendar/calendar';
+import { Modal } from './modal/modal';
 import { Login } from './login/login';
+import { AuthService } from './auth/auth.service';
+import { Toast } from './toast/toast';
 import { AuthGuard } from './auth/auth-guard';
-import { FormsModule } from '@angular/forms';
-
-const routes: Routes = [
-  { path: 'login', component: Login },
-  { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
-  { path: 'guests', component: GuestListManager, canActivate: [AuthGuard] },
-  { path: 'vendors', component: VendorContactList, canActivate: [AuthGuard] },
-  { path: 'budget', component: BudgetPlanner, canActivate: [AuthGuard] },
-  { path: 'tasks', component: TaskChecklist, canActivate: [AuthGuard] },
-  { path: 'schedule', component: PrintableSchedule, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
-];
 
 @NgModule({
   declarations: [
-    BudgetPlanner,
-
+    App,
+  VendorContactList,
+  TaskChecklist,
+  PrintableSchedule,
+  Dashboard,
+  Calendar,
+  Modal
   ],
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    GuestListManager,
+    BudgetPlanner,
+    Toast
+  ],
+  providers: [
+    DataService,
+    AuthService,
+    AuthGuard
+  ],
+  bootstrap: [App]
 })
-export class AppRoutingModule { }
+export class AppModule { }

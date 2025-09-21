@@ -1,6 +1,6 @@
-<div class="modal-overlay" *ngIf="visible" [@modalFade]>
-  <div class="modal-content">
-    <button class="close-btn" (click)="close()">X</button>
+<div class="modal" [class.show]="show" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-button" (click)="close()">&times;</span>
     <ng-content></ng-content>
   </div>
 </div>

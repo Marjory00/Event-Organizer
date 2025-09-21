@@ -1,38 +1,24 @@
-<app-toast></app-toast>
-<nav class="navbar">
-  <div class="navbar-brand">Event-Organizer</div>
+<header>
+  <h1>Wedding Planner</h1>
+  <nav>
+    <ng-container *ngIf="isLoggedIn$ | async as isLoggedIn">
+      <a *ngIf="isLoggedIn; else loginBtn" (click)="logout()" href="#">Logout</a>
+    </ng-container>
+    <ng-template #loginBtn>
+      <a routerLink="/login">Login</a>
+    </ng-template>
 
-  <ul class="navbar-nav">
-    <li>
-      <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
-    </li>
-    <li>
-      <a routerLink="/guests" routerLinkActive="active-link">Guests</a>
-    </li>
-    <li>
-      <a routerLink="/vendors" routerLinkActive="active-link">Vendors</a>
-    </li>
-    <li>
-      <a routerLink="/budget" routerLinkActive="active-link">Budget</a>
-    </li>
-    <li>
-      <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
-    </li>
-    <li>
-      <a routerLink="/schedule" routerLinkActive="active-link">Schedule</a>
-    </li>
-  </ul>
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/guests">Guests</a>
+    <a routerLink="/vendors">Vendors</a>
+    <a routerLink="/budget">Budget</a>
+    <a routerLink="/tasks">Tasks</a>
+    <a routerLink="/schedule">Schedule</a>
+  </nav>
+</header>
 
-  <ul class="navbar-auth">
-    <li>
-      <a *ngIf="isLoggedIn$ | async; else loginBtn" (click)="logout()">Logout</a>
-      <ng-template #loginBtn>
-        <a routerLink="/login">Login</a>
-      </ng-template>
-    </li>
-  </ul>
-</nav>
-
-<div class="container">
+<main>
   <router-outlet></router-outlet>
-</div>
+</main>
+
+<app-toast></app-toast>

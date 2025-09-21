@@ -1,54 +1,45 @@
-import { Component, OnInit} from '@angular/core';
-import { trigger, style, animate, transition } from '@angular/animations';
-import { DataService } from '../data';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'; // Import the map operator
-
-// Interface for a single guest
+import { DataService } from '../data';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface Guest {
+  id: number;
   name: string;
   rsvp: 'Yes' | 'No' | 'Pending';
 }
 
 @Component({
   selector: 'app-guest-list-manager',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './guest-list-manager.html',
-  styleUrl: './guest-list-manager.css',
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('0.5s ease-in', style({ opacity: 1 }))
-      ])
-    ])
-  ]
+  styleUrls: ['./guest-list-manager.css']
 })
-export class GuestListManager implements OnInit{
-    // Use Observable to get data from the service
-  guests$!: Observable<Guest[]>;
-  newGuestName: string = '';
+export class GuestListManager implements OnInit {
+  public guests$!: Observable<Guest[]>;
+  public newGuest: Omit<Guest, 'id'> = { name: '', rsvp: 'Pending' };
 
-  // Inject the DataService
-  constructor(private dataService: DataService) { }
+  constructor(public dataService: DataService) {}
 
   ngOnInit(): void {
-    // Subscribe to the guests data stream from the service
     this.guests$ = this.dataService.guests$;
   }
 
-  // Adds a new guest using the DataService
   addGuest(): void {
-    if (this.newGuestName.trim()) {
-      const newGuest: Guest = { name: this.newGuestName, rsvp: 'Pending' };
-      this.dataService.addGuest(newGuest);
-      this.newGuestName = ''; // Clear the input field
+    if (this.newGuest.name.trim()) {
+      this.dataService.addGuest(this.newGuest);
+      this.newGuest = { name: '', rsvp: 'Pending' };
     }
   }
 
-  // Updates the RSVP status of a guest using the DataService
-  updateRsvp(guest: Guest, status: 'Yes' | 'No' | 'Pending'): void {
-    this.dataService.updateRsvp(guest, status);
+  removeGuest(id: number): void {
+    this.dataService.removeGuest(id);
+  }
+
+  toggleRsvp(id: number, rsvp: string): void {
+    const validRsvp = rsvp === 'Yes' || rsvp === 'No' || rsvp === 'Pending' ? rsvp : 'Pending';
+    this.dataService.updateGuestRsvp(id, validRsvp);
   }
 }

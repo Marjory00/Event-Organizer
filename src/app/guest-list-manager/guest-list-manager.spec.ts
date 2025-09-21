@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GuestListManager } from './guest-list-manager';
+import { DataService } from '../data';
+import { of } from 'rxjs';
 
 describe('GuestListManager', () => {
   let component: GuestListManager;
@@ -8,9 +9,16 @@ describe('GuestListManager', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GuestListManager]
-    })
-    .compileComponents();
+      declarations: [GuestListManager],
+      providers: [
+        {
+          provide: DataService,
+          useValue: {
+            getGuestListData: () => of([]) // ✅ Mocked observable
+          }
+        }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GuestListManager);
     component = fixture.componentInstance;

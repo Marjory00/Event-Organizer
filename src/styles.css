@@ -12,7 +12,7 @@ body {
 }
 
 .main-nav {
-  background-color: #007bff;
+  background-color: #606366;
   padding: 15px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -30,6 +30,49 @@ body {
   color: #e2e6ea;
 }
 
+
+/* Updated Navbar Styling */
+.navbar {
+  background-color: #1b2863;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center; /* Centers the brand and menu group */
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute; /* Positions the brand absolutely */
+  left: 2rem; /* Aligns the brand to the far left */
+}
+
+.navbar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Centers the navigation links */
+}
+
+.navbar-nav li {
+  margin: 0 1rem; /* Adjusts margins for centered links */
+}
+
+.navbar-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav a:hover,
+.navbar-nav a.active-link {
+  color: #cce5ff;
+}
+
 /* Basic container styling */
 .container {
   max-width: 900px;
@@ -42,12 +85,12 @@ body {
 
 /* Heading styles */
 h1, h2, h3 {
-  color: #0056b3; /* A nice blue for headings */
+  color: #272e36; /* A nice blue for headings */
 }
 
 /* Button styles */
 button {
-  background-color: #007bff; /* Blue */
+  background-color: #0f738f; /* Blue */
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -58,7 +101,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #1490b3; /* Darker blue on hover */
 }
 
 /* Form input styles */

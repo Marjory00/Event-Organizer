@@ -9,6 +9,8 @@ import { BudgetPlanner } from './budget-planner/budget-planner';
 import { TaskChecklist } from './task-checklist/task-checklist';
 import { FormsModule } from '@angular/forms';
 import { PrintableSchedule } from './printable-schedule/printable-schedule';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
+import { DataService } from './data';
 
 
 @NgModule({
@@ -27,8 +29,10 @@ import { PrintableSchedule } from './printable-schedule/printable-schedule';
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideAnimations(),
     provideZonelessChangeDetection(),
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    DataService
   ],
   bootstrap: [App]
 })

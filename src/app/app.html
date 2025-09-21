@@ -1,10 +1,24 @@
-<nav class="main-nav">
-  <a routerLink="/guests">Guests</a> |
-  <a routerLink="/vendors">Vendors</a> |
-  <a routerLink="/budget">Budget</a> |
-  <a routerLink="/tasks">Tasks</a> |
-  <a routerLink="/schedule">Schedule</a>
+<nav class="navbar">
+  <div class="navbar-brand">Event-Organizer</div>
+  <ul class="navbar-nav">
+    <li>
+      <a routerLink="/guests" routerLinkActive="active-link">Guests</a>
+    </li>
+    <li>
+      <a routerLink="/vendors" routerLinkActive="active-link">Vendors</a>
+    </li>
+    <li>
+      <a routerLink="/budget" routerLinkActive="active-link">Budget</a>
+    </li>
+    <li>
+      <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
+    </li>
+    <li>
+      <a routerLink="/schedule" routerLinkActive="active-link">Schedule</a>
+    </li>
+  </ul>
 </nav>
+
 <div class="container">
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

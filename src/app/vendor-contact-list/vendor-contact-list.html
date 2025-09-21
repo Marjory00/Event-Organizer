@@ -1,2 +1,37 @@
 <h2>Vendor Contact List</h2>
 
+<form (ngSubmit)="addVendor()">
+  <div class="form-group">
+    <label for="vendor-name">Vendor Name:</label>
+    <input id="vendor-name" type="text" [(ngModel)]="newVendor.name" name="name" required>
+  </div>
+  <div class="form-group">
+    <label for="contact">Contact:</label>
+    <input id="contact" type="text" [(ngModel)]="newVendor.contact" name="contact">
+  </div>
+  <div class="form-group">
+    <label for="service">Service:</label>
+    <input id="service" type="text" [(ngModel)]="newVendor.service" name="service" required>
+  </div>
+  <button type="submit">Add Vendor</button>
+</form>
+
+<hr>
+
+<h3>Current Vendors</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Service</th>
+      <th>Contact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let vendor of vendors">
+      <td>{{ vendor.name }}</td>
+      <td>{{ vendor.service }}</td>
+      <td>{{ vendor.contact }}</td>
+    </tr>
+  </tbody>
+</table>

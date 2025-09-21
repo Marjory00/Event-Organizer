@@ -1,0 +1,12 @@
+
+@media print {
+  /* Hide the print button when the user is printing */
+  button {
+    display: none;
+  }
+  /* Ensure the page prints cleanly */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}

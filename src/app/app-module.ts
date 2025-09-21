@@ -8,6 +8,7 @@ import { VendorContactList } from './vendor-contact-list/vendor-contact-list';
 import { BudgetPlanner } from './budget-planner/budget-planner';
 import { TaskChecklist } from './task-checklist/task-checklist';
 import { FormsModule } from '@angular/forms';
+import { PrintableSchedule } from './printable-schedule/printable-schedule';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     GuestListManager,
     VendorContactList,
     BudgetPlanner,
-    TaskChecklist
+    TaskChecklist,
+    PrintableSchedule
   ],
   imports: [
     BrowserModule,

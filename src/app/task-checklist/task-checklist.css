@@ -1,14 +1,5 @@
-.task-checklist-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
 
-.task-form {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.add-task-form {
   margin-bottom: 20px;
 }
 
@@ -18,11 +9,17 @@ ul {
 }
 
 li {
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 8px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease;
+}
+
+li.completed {
+  background-color: #e0f7e9; /* A light green for completed items */
 }
 
 li.completed span {
@@ -30,11 +27,7 @@ li.completed span {
   color: #888;
 }
 
-li span {
-  cursor: pointer;
-  flex-grow: 1;
-}
-
-li button {
-  margin-left: 10px;
+input[type="checkbox"] {
+  margin-right: 15px;
+  transform: scale(1.5); /* Makes the checkbox larger */
 }

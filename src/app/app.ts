@@ -1,23 +1,11 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth/auth.service';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  standalone: false,
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  standalone: false,
+  styleUrl: './app.css'
 })
 export class App {
-  isLoggedIn$: Observable<boolean>;
-
-  constructor(private router: Router, private authService: AuthService) {
-    this.isLoggedIn$ = this.authService.isLoggedIn;
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+  protected readonly title = signal('Event-Organizer');
 }

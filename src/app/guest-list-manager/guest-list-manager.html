@@ -1,59 +1,15 @@
-<div class="guest-list-container">
-  <h2>Guest List Manager</h2>
+<h2>Guest List Manager</h2>
 
-  <div class="guest-form">
-    <h3>Add a New Guest</h3>
-    <form (ngSubmit)="addGuest()" #guestForm="ngForm">
-      <div class="form-group">
-        <label for="guest-name">Guest Name:</label>
-        <input
-          id="guest-name"
-          type="text"
-          [(ngModel)]="newGuest.name"
-          name="name"
-          required
-          #guestName="ngModel"
-        />
-        <div *ngIf="guestName.invalid && guestName.touched" class="error-message">
-          Name is required.
-        </div>
-      </div>
-      <button type="submit" [disabled]="!guestForm.valid">Add Guest</button>
-    </form>
-  </div>
-
-  <div class="guest-counts">
-    <h4>Guest Summary</h4>
-    <p>Total Guests: {{ (dataService.getGuestCounts() | async)?.total }}</p>
-    <p>Confirmed: {{ (dataService.getGuestCounts() | async)?.yes }}</p>
-    <p>Declined: {{ (dataService.getGuestCounts() | async)?.no }}</p>
-    <p>Pending: {{ (dataService.getGuestCounts() | async)?.pending }}</p>
-  </div>
-
-  <hr>
-
-  <h3>Current Guests</h3>
-  <table class="guest-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>RSVP Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let guest of guests$ | async">
-        <td>{{ guest.name }}</td>
-        <td>{{ guest.rsvp }}</td>
-        <td>
-          <select [ngModel]="guest.rsvp" (ngModelChange)="toggleRsvp(guest.id, $event)" [name]="'rsvp-' + guest.id">
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="Pending">Pending</option>
-          </select>
-          <button (click)="removeGuest(guest.id)">Remove</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="add-guest-form">
+  <input [(ngModel)]="newGuestName" placeholder="Enter guest name">
+  <button (click)="addGuest()">Add Guest</button>
 </div>
+
+<h3>Guest List</h3>
+<ul>
+  <li *ngFor="let guest of guests">
+    {{ guest.name }} - RSVP: <strong>{{ guest.rsvp }}</strong>
+    <button (click)="updateRsvp(guest, 'Yes')">Confirm</button>
+    <button (click)="updateRsvp(guest, 'No')">Decline</button>
+  </li>
+</ul>

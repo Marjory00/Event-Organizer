@@ -1,20 +1,11 @@
-<div class="printable-schedule-container">
-  <h2>Printable Wedding Schedule</h2>
-  <div class="print-button-container">
-    <button (click)="printSchedule()">Print</button>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Activity</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of schedule$ | async">
-        <td>{{ item.time }}</td>
-        <td>{{ item.activity }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="printable-container">
+  <h2>Event Schedule</h2>
+
+  <ul>
+    <li *ngFor="let item of schedule">
+      <strong>{{ item.time }}</strong>: {{ item.activity }}
+    </li>
+  </ul>
+
+  <button (click)="printSchedule()">Print Schedule</button>
 </div>

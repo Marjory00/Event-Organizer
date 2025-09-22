@@ -1,45 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DataService } from '../data';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+
+// Interface for a single guest
 
 interface Guest {
-  id: number;
   name: string;
   rsvp: 'Yes' | 'No' | 'Pending';
 }
 
 @Component({
   selector: 'app-guest-list-manager',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  standalone: false,
   templateUrl: './guest-list-manager.html',
-  styleUrls: ['./guest-list-manager.css']
+  styleUrl: './guest-list-manager.css'
 })
-export class GuestListManager implements OnInit {
-  public guests$!: Observable<Guest[]>;
-  public newGuest: Omit<Guest, 'id'> = { name: '', rsvp: 'Pending' };
+export class GuestListManager implements OnInit{
+   // Array to store guest data
+  guests: Guest[] = [];
+  newGuestName: string = '';
 
-  constructor(public dataService: DataService) {}
+  constructor() { }
 
   ngOnInit(): void {
-    this.guests$ = this.dataService.guests$;
+    // Initial data for demonstration
+    this.guests.push({ name: 'Jane Doe', rsvp: 'Yes' });
+    this.guests.push({ name: 'John Smith', rsvp: 'Pending' });
   }
 
+  // Adds a new guest to the list
   addGuest(): void {
-    if (this.newGuest.name.trim()) {
-      this.dataService.addGuest(this.newGuest);
-      this.newGuest = { name: '', rsvp: 'Pending' };
+    if (this.newGuestName.trim()) {
+      this.guests.push({ name: this.newGuestName, rsvp: 'Pending' });
+      this.newGuestName = ''; // Clear the input field
     }
   }
 
-  removeGuest(id: number): void {
-    this.dataService.removeGuest(id);
-  }
-
-  toggleRsvp(id: number, rsvp: string): void {
-    const validRsvp = rsvp === 'Yes' || rsvp === 'No' || rsvp === 'Pending' ? rsvp : 'Pending';
-    this.dataService.updateGuestRsvp(id, validRsvp);
+  // Updates the RSVP status of a guest
+  updateRsvp(guest: Guest, status: 'Yes' | 'No' | 'Pending'): void {
+    guest.rsvp = status;
   }
 }

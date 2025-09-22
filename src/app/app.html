@@ -1,24 +1,24 @@
-<header>
-  <h1>Wedding Planner</h1>
-  <nav>
-    <ng-container *ngIf="isLoggedIn$ | async as isLoggedIn">
-      <a *ngIf="isLoggedIn; else loginBtn" (click)="logout()" href="#">Logout</a>
-    </ng-container>
-    <ng-template #loginBtn>
-      <a routerLink="/login">Login</a>
-    </ng-template>
+<nav class="navbar">
+  <div class="navbar-brand">Event-Organizer</div>
+  <ul class="navbar-nav">
+    <li>
+      <a routerLink="/guests" routerLinkActive="active-link">Guests</a>
+    </li>
+    <li>
+      <a routerLink="/vendors" routerLinkActive="active-link">Vendors</a>
+    </li>
+    <li>
+      <a routerLink="/budget" routerLinkActive="active-link">Budget</a>
+    </li>
+    <li>
+      <a routerLink="/tasks" routerLinkActive="active-link">Tasks</a>
+    </li>
+    <li>
+      <a routerLink="/schedule" routerLinkActive="active-link">Schedule</a>
+    </li>
+  </ul>
+</nav>
 
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/guests">Guests</a>
-    <a routerLink="/vendors">Vendors</a>
-    <a routerLink="/budget">Budget</a>
-    <a routerLink="/tasks">Tasks</a>
-    <a routerLink="/schedule">Schedule</a>
-  </nav>
-</header>
-
-<main>
+<div class="container">
   <router-outlet></router-outlet>
-</main>
-
-<app-toast></app-toast>
+</div>

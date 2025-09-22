@@ -1,69 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, DecimalPipe, AsyncPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DataService } from '../data';
+import { Component } from '@angular/core';
 
+// Interface for a budget item
 interface BudgetItem {
-  id: number;
   name: string;
   cost: number;
-  isEditing?: boolean;
-}
 
+}
 @Component({
   selector: 'app-budget-planner',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DecimalPipe, AsyncPipe],
+  standalone: false,
   templateUrl: './budget-planner.html',
-  styleUrls: ['./budget-planner.css']
+  styleUrl: './budget-planner.css'
 })
-export class BudgetPlanner implements OnInit {
-  budgetItems$!: Observable<BudgetItem[]>;
-  totalCost$!: Observable<number>;
-  itemCount$!: Observable<number>;
+export class BudgetPlanner {
+  // Array to store budget items
+  budgetItems: BudgetItem[] = [
+    { name: 'Venue Rental', cost: 2500 },
+    { name: 'Catering', cost: 1500 }
+  ];
 
-  newBudgetItem: Omit<BudgetItem, 'id'> = {
-    name: '',
-    cost: 0
-  };
+// Object for the new budget item form input
+newItem = {
+  name: '',
+  cost: 0
+};
 
-  constructor(private dataService: DataService) { }
+// Getter to calculate total cost
+get totalCost(): number {
+  return this.budgetItems.reduce((total, item) => total + item.cost, 0);
+}
 
-  ngOnInit(): void {
-    this.budgetItems$ = this.dataService.budgetItems$;
-    this.totalCost$ = this.budgetItems$.pipe(
-      map(items => items.reduce((sum, item) => sum + item.cost, 0))
-    );
-    this.itemCount$ = this.budgetItems$.pipe(
-      map(items => items.length)
-    );
+// Adds a new budget item to the list
+addItem(): void {
+  if (this.newItem.name && this.newItem.cost > 0) {
+    this.budgetItems.push({ ...this.newItem }); // Use spread operator to create a new object
+    this.newItem = { name: '', cost: 0 }; // Reset the form
   }
-
-  addBudgetItem(): void {
-    if (this.newBudgetItem.name.trim() && this.newBudgetItem.cost > 0) {
-      this.dataService.addBudgetItem(this.newBudgetItem);
-      this.newBudgetItem = { name: '', cost: 0 };
-    }
-  }
-
-  removeBudgetItem(id: number): void {
-    this.dataService.removeBudgetItem(id);
-  }
-
-  editItem(item: BudgetItem): void {
-    item.isEditing = true;
-  }
-
-  saveEdit(item: BudgetItem): void {
-    if (item.name.trim() && item.cost > 0) {
-      this.dataService.updateBudgetItem(item.id, item);
-      item.isEditing = false;
-    }
-  }
-
-  cancelEdit(item: BudgetItem): void {
-    item.isEditing = false;
-  }
+}
 }

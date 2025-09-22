@@ -1,67 +1,26 @@
-.budget-planner-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
 
-.budget-form {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.budget-summary {
-  background-color: #e9f5ff;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #cce5ff;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
+.budget-summary-table {
   margin-top: 20px;
 }
 
-table th,
-table td {
+.budget-summary-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.budget-summary-table th,
+.budget-summary-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
 }
 
-table th {
+.budget-summary-table th {
   background-color: #f2f2f2;
 }
 
-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.alert-danger {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 5px;
 }

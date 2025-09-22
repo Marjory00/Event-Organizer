@@ -1,125 +1,129 @@
+// removed misplaced method at top of file
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-// Interfaces for your data types
-interface Guest {
-  name: string;
-  rsvp: 'Yes' | 'No' | 'Pending';
-}
-
-interface Vendor {
+export interface Vendor {
+  id: number;
   name: string;
   contact: string;
   service: string;
 }
 
-interface BudgetItem {
+export interface BudgetItem {
+  id: number;
   name: string;
   cost: number;
-}
-
-interface Task {
-  name: string;
-  completed: boolean;
-}
-
-interface ScheduleItem {
-  time: string;
-  activity: string;
+  isEditing?: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
-  // Guest List Data Stream
-  private guestsSource = new BehaviorSubject<Guest[]>([]);
-  guests$ = this.guestsSource.asObservable();
-
-  // Vendor Contact Data Stream
-  private vendorsSource = new BehaviorSubject<Vendor[]>([]);
-  vendors$ = this.vendorsSource.asObservable();
-
-  // Budget Planner Data Stream
-  private budgetItemsSource = new BehaviorSubject<BudgetItem[]>([]);
-  budgetItems$ = this.budgetItemsSource.asObservable();
-
-  // Task Checklist Data Stream
-  private tasksSource = new BehaviorSubject<Task[]>([]);
-  tasks$ = this.tasksSource.asObservable();
-
-  // Printable Schedule Data Stream
-  private scheduleSource = new BehaviorSubject<ScheduleItem[]>([]);
-  schedule$ = this.scheduleSource.asObservable();
-
-  constructor() {
-    // Initialize with some mock data
-    this.guestsSource.next([
-      { name: 'Jane Doe', rsvp: 'Yes' },
-      { name: 'John Smith', rsvp: 'Pending' }
-    ]);
-
-    this.vendorsSource.next([
-      { name: 'Caterer Co.', contact: '555-1234', service: 'Catering' },
-      { name: 'DJ Sound', contact: '555-5678', service: 'Music' }
-    ]);
-
-    this.budgetItemsSource.next([
-      { name: 'Venue Rental', cost: 2500 },
-      { name: 'Catering', cost: 1500 }
-    ]);
-
-    this.tasksSource.next([
-      { name: 'Send out invitations', completed: false },
-      { name: 'Book the photographer', completed: true }
-    ]);
-
-    this.scheduleSource.next([
-      { time: '10:00 AM', activity: 'Guest Arrival' },
-      { time: '11:00 AM', activity: 'Ceremony Begins' }
-    ]);
+  // Guest management for GuestListManager
+  private _guests$ = new BehaviorSubject<any[]>([]);
+  get guests$(): Observable<any[]> {
+    return this._guests$.asObservable();
+  }
+  addGuest(guest: any) {
+    const guests = this._guests$.value;
+    this._guests$.next([...guests, { ...guest, id: Date.now() }]);
+  }
+  removeGuest(id: number) {
+    const guests = this._guests$.value.filter((g: any) => g.id !== id);
+    this._guests$.next(guests);
+  }
+  updateGuestRsvp(id: number, rsvp: string) {
+    const guests = this._guests$.value.map((g: any) => g.id === id ? { ...g, rsvp } : g);
+    this._guests$.next(guests);
+  }
+  getGuestCounts(): Observable<{ total: number; yes: number; no: number; pending: number }> {
+    return this.guests$.pipe(
+      map((guests: any[]) => ({
+        total: guests.length,
+        yes: guests.filter((g: any) => g.rsvp === 'Yes').length,
+        no: guests.filter((g: any) => g.rsvp === 'No').length,
+        pending: guests.filter((g: any) => g.rsvp === 'Pending').length
+      }))
+    );
+  }
+  // Stub for schedule$
+  private _schedule$ = new BehaviorSubject<any[]>([]);
+  get schedule$(): Observable<any[]> {
+    return this._schedule$.asObservable();
   }
 
-  // Guest List Methods
-  addGuest(newGuest: Guest): void {
-    const currentGuests = this.guestsSource.getValue();
-    this.guestsSource.next([...currentGuests, newGuest]);
+  // Stub for tasks$
+  private _tasks$ = new BehaviorSubject<any[]>([]);
+  get tasks$(): Observable<any[]> {
+    return this._tasks$.asObservable();
   }
 
-  updateRsvp(guest: Guest, status: 'Yes' | 'No' | 'Pending'): void {
-    const guests = this.guestsSource.getValue();
-    const guestToUpdate = guests.find(g => g.name === guest.name);
-    if (guestToUpdate) {
-      guestToUpdate.rsvp = status;
-      this.guestsSource.next([...guests]); // Emit the updated array
-    }
+  // Stub for addTask
+  addTask(task: any) {
+    const tasks = this._tasks$.value;
+    this._tasks$.next([...tasks, { ...task, id: Date.now() }]);
   }
 
-  // Vendor Contact Methods
-  addVendor(newVendor: Vendor): void {
-    const currentVendors = this.vendorsSource.getValue();
-    this.vendorsSource.next([...currentVendors, newVendor]);
+  // Stub for toggleCompletion
+  toggleCompletion(id: number) {
+    const tasks = this._tasks$.value.map((t: any) => t.id === id ? { ...t, completed: !t.completed } : t);
+    this._tasks$.next(tasks);
   }
 
-  // Budget Planner Methods
-  addBudgetItem(newItem: BudgetItem): void {
-    const currentItems = this.budgetItemsSource.getValue();
-    this.budgetItemsSource.next([...currentItems, newItem]);
+  // Stub for removeTask
+  removeTask(id: number) {
+    const tasks = this._tasks$.value.filter((t: any) => t.id !== id);
+    this._tasks$.next(tasks);
   }
 
-  // Task Checklist Methods
-  addTask(newTask: Task): void {
-    const currentTasks = this.tasksSource.getValue();
-    this.tasksSource.next([...currentTasks, newTask]);
+  // Stub for getDashboardData
+  getDashboardData(): Observable<any> {
+    return of({});
+  }
+  updateBudgetItem(id: number, updated: BudgetItem) {
+    const items = this._budgetItems$.value.map((i: BudgetItem) => i.id === id ? { ...updated } : i);
+    this._budgetItems$.next(items);
+  }
+  private _vendors$ = new BehaviorSubject<Vendor[]>([]);
+  private _budgetItems$ = new BehaviorSubject<BudgetItem[]>([]);
+
+  get vendors$(): Observable<Vendor[]> {
+    return this._vendors$.asObservable();
   }
 
-  toggleCompletion(task: Task): void {
-    const tasks = this.tasksSource.getValue();
-    const taskToUpdate = tasks.find(t => t.name === task.name);
-    if (taskToUpdate) {
-      taskToUpdate.completed = !taskToUpdate.completed;
-      this.tasksSource.next([...tasks]);
-    }
+  get budgetItems$(): Observable<BudgetItem[]> {
+    return this._budgetItems$.asObservable();
+  }
+
+  addVendor(vendor: Omit<Vendor, 'id'>) {
+    const vendors = this._vendors$.value;
+    this._vendors$.next([...vendors, { ...vendor, id: Date.now() }]);
+  }
+
+  removeVendor(id: number) {
+    const vendors = this._vendors$.value.filter(v => v.id !== id);
+    this._vendors$.next(vendors);
+  }
+
+  addBudgetItem(item: Omit<BudgetItem, 'id'>) {
+    const items = this._budgetItems$.value;
+    this._budgetItems$.next([...items, { ...item, id: Date.now() }]);
+  }
+
+  removeBudgetItem(id: number) {
+    const items = this._budgetItems$.value.filter(i => i.id !== id);
+    this._budgetItems$.next(items);
+  }
+
+  getGuestListData(): Observable<any[]> {
+    // Replace with actual HTTP call if needed
+    const mockGuests = [
+      { name: 'Alice', role: 'Bride' },
+      { name: 'Bob', role: 'Groom' },
+      { name: 'Charlie', role: 'Guest' }
+    ];
+    return of(mockGuests); //  Simulates an observable stream
   }
 }

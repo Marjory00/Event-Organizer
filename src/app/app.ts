@@ -1,11 +1,16 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; // Import RouterModule
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
-  standalone: false,
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [CommonModule, RouterModule], // Add RouterModule here
+  styleUrls: ['./app.css'],
+  template: `
+    <router-outlet></router-outlet>
+  `,
 })
-export class App {
-  protected readonly title = signal('Event-Organizer');
+export class AppComponent {
+  title = 'Event Organizer';
 }

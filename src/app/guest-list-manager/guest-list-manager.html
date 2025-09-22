@@ -1,15 +1,15 @@
-<h2>Guest List Manager</h2>
-
-<div class="add-guest-form">
-  <input [(ngModel)]="newGuestName" placeholder="Enter guest name">
+<h2>Guest List</h2>
+<div class="guest-form">
+  <input [(ngModel)]="newGuestName" placeholder="Guest Name" />
+  <input [(ngModel)]="newGuestEmail" placeholder="Guest Email" />
   <button (click)="addGuest()">Add Guest</button>
 </div>
-
-<h3>Guest List</h3>
-<ul>
+<hr>
+<ul class="guest-list">
   <li *ngFor="let guest of guests">
-    {{ guest.name }} - RSVP: <strong>{{ guest.rsvp }}</strong>
-    <button (click)="updateRsvp(guest, 'Yes')">Confirm</button>
-    <button (click)="updateRsvp(guest, 'No')">Decline</button>
+    {{ guest.name }} - {{ guest.email }} ({{ guest.rsvpStatus }})
+    <button (click)="updateRsvpStatus(guest.id, 'Attending')">✔️</button>
+    <button (click)="updateRsvpStatus(guest.id, 'Not Attending')">❌</button>
+    <button (click)="deleteGuest(guest.id)">🗑️</button>
   </li>
 </ul>
